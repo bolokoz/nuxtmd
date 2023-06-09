@@ -54,9 +54,18 @@
             </v-col>
 
             <v-col cols="12" md="4">
+
               <v-textarea v-model="obs_sentimental" label="Obs sentimental" required></v-textarea>
             </v-col>
             <v-col cols="12" md="4">
+              <v-select
+                :items="obsTemplateOptions"
+                v-model="obsTemplateSelected"
+                @update:model-value="onSelectObsOptions()"
+                label="Templates"
+              >
+
+              </v-select>
               <v-textarea v-model="obs_tecnica" label="Obs tecnica" required></v-textarea>
             </v-col>
 
@@ -107,17 +116,37 @@ useHead({
 // )
 const images = ref([])
 
+const obsTemplateOptions= ['parmegiana v1', 'lanche v1']
+const obsTemplateSelected = ref('')
+
+function onSelectObsOptions(){
+  switch (obsTemplateSelected.value) {
+    case 'parmegiana v1':
+    console.log('parmeee')
+      obs_tecnica.value = `
+        Molho: /3
+        Crosta: /3
+        Carne: /3
+      `
+      break;
+    case 'lanche v1':
+      console.log('lancheeee')
+      obs_tecnica.value = `
+        Pao: /3
+        Embalagem: /3
+        Carne: /3
+      `
+      break;
+  
+  }
+}
+
 const client = useSupabaseClient()
 const { data: reviews, pending, error } = await useAsyncData('reviews', async () => {
   const {data} = await client.from('reviews').select('prato, restaurants (nome)')
   
   return data
 })
-const restaurantOptions = computed(() => {
-
-  return reviews.map(d=> d?.restaurants?.nome)
-}
-)
 
 console.log(reviews)
 
@@ -219,7 +248,8 @@ const restSearch = ref('')
 const valid = ref(true)
 const restaurante = ref('')
 const prato = ref('')
-const obs = ref('')
+const obs_sentimental = ref('')
+const obs_tecnica = ref('')
 const notaSentimental = ref(1)
 const labels = ref(['ruim', 'bom', 'otimo'])
 const notaTecnica = ref(1)
@@ -231,7 +261,7 @@ const mdtext = computed(() => {
     `images:${images.value} \r\n` +
     `nota:${notaSentimental.value} \\n
   ---`
-  const text = obs.value
+  const text = obs_tecnica.value
 
   return yaml + text
 })
