@@ -10,14 +10,14 @@
             <v-col cols="12" md="4">
               <v-text-field v-model="restaurante" label="Restaurante" required></v-text-field>
             </v-col>
-            <!-- <v-col v-if="!pending" cols="12" md="4">
-              <v-autocomplete :loading="pending" label="Restaurante" auto-select-first :items="restaurantes"
+            <v-col v-if="!pending" cols="12" md="4">
+              <v-autocomplete :loading="pending" label="Restaurante" auto-select-first :items="reviews.map(d=>d.restaurants.nome)"
                 v-model:search.sync="restSearch" chips v-model="restaurante">
                 <template v-slot:no-data>
                   <v-btn @click="newRestaurant()">create {{ restSearch }}</v-btn>
                 </template>
               </v-autocomplete>
-            </v-col> -->
+            </v-col>
 
             <!-- <v-col
           cols="12"
@@ -54,7 +54,10 @@
             </v-col>
 
             <v-col cols="12" md="4">
-              <v-textarea v-model="obs" label="Obs" required></v-textarea>
+              <v-textarea v-model="obs_sentimental" label="Obs sentimental" required></v-textarea>
+            </v-col>
+            <v-col cols="12" md="4">
+              <v-textarea v-model="obs_tecnica" label="Obs tecnica" required></v-textarea>
             </v-col>
 
             
@@ -103,6 +106,20 @@ useHead({
 //   }
 // )
 const images = ref([])
+
+const client = useSupabaseClient()
+const { data: reviews, pending, error } = await useAsyncData('reviews', async () => {
+  const {data} = await client.from('reviews').select('prato, restaurants (nome)')
+  
+  return data
+})
+const restaurantOptions = computed(() => {
+
+  return reviews.map(d=> d?.restaurants?.nome)
+}
+)
+
+console.log(reviews)
 
 const widget = cloudinary.createUploadWidget({
   cloud_name: 'boloko', upload_preset: 'nuxtmd', sources: [
@@ -219,7 +236,7 @@ const mdtext = computed(() => {
   return yaml + text
 })
 
-// function newRestaurant() {
-//   restaurante.value = restSearch.value
-// }
+function newRestaurant() {
+  restaurante.value = restSearch.value
+}
 </script>
