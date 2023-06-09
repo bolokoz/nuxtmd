@@ -1,0 +1,24 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@invictus.codes/nuxt-vuetify": "^0.2.20",
+    "@types/node": "^18",
+    "nuxt": "^3.5.2"
+  },
+  "dependencies": {
+    "@cloudinary/url-gen": "^1.10.1",
+    "@cloudinary/vue": "^1.11.2",
+    "@formkit/nuxt": "^0.17.2",
+    "@notionhq/client": "^2.2.5",
+    "@nuxtjs/cloudinary": "^2.0.0-rc.3",
+    "nuxt-api-party": "^0.11.4"
+  }
+}
