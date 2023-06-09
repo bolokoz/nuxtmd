@@ -14,21 +14,39 @@
               <v-autocomplete :loading="pending" label="Restaurante" auto-select-first :items="reviews.map(d=>d.restaurants.nome)"
                 v-model:search.sync="restSearch" chips v-model="restaurante">
                 <template v-slot:no-data>
-                  <v-btn @click="newRestaurant()">create {{ restSearch }}</v-btn>
+                  <v-btn @click="createRestaurant()">create {{ restSearch }}</v-btn>
                 </template>
               </v-autocomplete>
             </v-col>
 
-            <!-- <v-col
+            <v-col
+            v-if="newRestaurant"
           cols="12"
           md="4"
         >
-          <v-text-field
-            v-model="restaurante"
-            label="Restaurante"
-            required
-          ></v-text-field>
-        </v-col> -->
+        <v-autocomplete :loading="pending" label="Cidade" auto-select-first :items="[...new Set(reviews.map(d=>d.restaurants?.cidade))]"
+                v-model:search.sync="cidadeSearch" chips v-model="cidade">
+                <template v-slot:no-data>
+                  <v-btn @click="cidade = cidadeSearch">create {{ cidadeSearch }}</v-btn>
+                </template>
+              </v-autocomplete>
+
+        </v-col>
+        
+        <v-col cols="12" md="4">
+
+
+          
+          <MapboxMap
+          map-id="{ID}"
+          style='position:relative;width: 400px; height: 300px;'
+          :options="{
+            style: 'mapbox://styles/mapbox/light-v11', // style URL
+            center: [-68.137343, 45.137451], // starting position
+            zoom: 5 // starting zoom
+          }"
+    />
+  </v-col>
 
 
 
@@ -90,7 +108,6 @@
 </template>
 
 <script setup>
-// import { Client } from '@notionhq/client'
 useHead({
   script: [
     {
@@ -99,6 +116,7 @@ useHead({
   ],
 })
 
+// import { Client } from '@notionhq/client'
 // const notion = new Client({ auth: 'secret_ur0AobNYDDXKMsWBCv7t33VkCNvjN5f5ZuxOWD4de3g' });
 // const blockId = 'c7ca4eca35ee4f8ebe2665a7be719c36';
 
@@ -114,36 +132,29 @@ useHead({
 //     }
 //   }
 // )
+
+// FORM
+const restSearch = ref('')
+const restaurante = ref('')
+const prato = ref('')
+const obs_sentimental = ref('')
+const obs_tecnica = ref('')
+const notaSentimental = ref(1)
+const labels = ref(['ruim', 'bom', 'otimo'])
+const notaTecnica = ref(1)
 const images = ref([])
 
-const obsTemplateOptions= ['parmegiana v1', 'lanche v1']
-const obsTemplateSelected = ref('')
 
-function onSelectObsOptions(){
-  switch (obsTemplateSelected.value) {
-    case 'parmegiana v1':
-    console.log('parmeee')
-      obs_tecnica.value = `
-        Molho: /3
-        Crosta: /3
-        Carne: /3
-      `
-      break;
-    case 'lanche v1':
-      console.log('lancheeee')
-      obs_tecnica.value = `
-        Pao: /3
-        Embalagem: /3
-        Carne: /3
-      `
-      break;
-  
-  }
-}
+// SETTINGS
+const newRestaurant = ref(false)
+const cidade = ref('')
+// const valid = ref(true)
 
+
+// SUPABASE
 const client = useSupabaseClient()
 const { data: reviews, pending, error } = await useAsyncData('reviews', async () => {
-  const {data} = await client.from('reviews').select('prato, restaurants (nome)')
+  const {data} = await client.from('reviews').select('prato, restaurants (nome, cidade)')
   
   return data
 })
@@ -191,69 +202,32 @@ function showUploadWidget() {
   widget.open()
 }
 
-// onMounted(() => {
-//   if(process.client){
-//     const widget = window.cloudinary.createUploadWidget({ cloud_name: 'boloko', upload_preset: 'boloko1' },
-//         function (error, result) { console.log(error, result) });
-//   }
-// })
+//TEMPLATES
+const obsTemplateOptions= ['parmegiana v1', 'lanche v1']
+const obsTemplateSelected = ref('')
+
+function onSelectObsOptions(){
+  switch (obsTemplateSelected.value) {
+    case 'parmegiana v1':
+      obs_tecnica.value = `
+        Molho: /3
+        Crosta: /3
+        Carne: /3
+      `
+      break;
+    case 'lanche v1':
+      obs_tecnica.value = `
+        Pao: /3
+        Embalagem: /3
+        Carne: /3
+      `
+      break;
+  
+  }
+}
 
 
-
-// const myWidget = process.client.cloudinary.createUploadWidget(
-//   {
-//     cloudName: cloudName,
-//     uploadPreset: uploadPreset,
-//     // cropping: true, //add a cropping step
-//     // showAdvancedOptions: true,  //add advanced options (public_id and tag)
-//     // sources: [ "local", "url"], // restrict the upload sources to URL and local files
-//     // multiple: false,  //restrict upload to a single file
-//     // folder: "user_images", //upload files to the specified folder
-//     // tags: ["users", "profile"], //add the given tags to the uploaded files
-//     // context: {alt: "user_uploaded"}, //add the given context data to the uploaded files
-//     // clientAllowedFormats: ["images"], //restrict uploading to image files only
-//     // maxImageFileSize: 2000000,  //restrict file size to less than 2MB
-//     // maxImageWidth: 2000, //Scales the image down to a width of 2000 pixels before uploading
-//     // theme: "purple", //change to a purple theme
-//   },
-//   (error, result) => {
-//     if (!error && result && result.event === "success") {
-//       console.log("Done! Here is the image info: ", result.info);
-//       document
-//         .getElementById("uploadedimage")
-//         .setAttribute("src", result.info.secure_url);
-//     }
-//   }
-// );
-
-// function open(){
-// myWidget.open()
-// }
-
-// import {Cloudinary} from '@cloudinary/url-gen'
-// import { AdvancedImage } from "@cloudinary/vue";
-// import { fill } from "@cloudinary/url-gen/actions/resize";
-
-// const cld = new Cloudinary({
-//   cloud: {
-//     cloudName: 'boloko'
-//   }
-// })
-
-// const myImg = cld.image("docs/models");
-// // Resize to 250 x 250 pixels using the 'fill' crop mode.
-// myImg.resize(fill().width(250).height(250));
-
-const restSearch = ref('')
-const valid = ref(true)
-const restaurante = ref('')
-const prato = ref('')
-const obs_sentimental = ref('')
-const obs_tecnica = ref('')
-const notaSentimental = ref(1)
-const labels = ref(['ruim', 'bom', 'otimo'])
-const notaTecnica = ref(1)
-
+// MD FILES
 const mdtext = computed(() => {
   const yaml = `--- 
   ` +
@@ -266,7 +240,10 @@ const mdtext = computed(() => {
   return yaml + text
 })
 
-function newRestaurant() {
+// CRIAR NOVO RESTAURANTE
+function createRestaurant() {
+  newRestaurant.value = true
   restaurante.value = restSearch.value
+  //TODO ADICIONAR LATLNG 
 }
 </script>

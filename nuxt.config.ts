@@ -4,8 +4,13 @@ export default defineNuxtConfig({
     modules: [
         '@invictus.codes/nuxt-vuetify',
         '@nuxtjs/cloudinary',
-        '@nuxtjs/supabase'
+        '@nuxtjs/supabase',
+        'nuxt-mapbox'
       ],
+
+      mapbox: {
+        accessToken: process.env.MAPBOX_API
+      },
 
       vuetify: {
         /* vuetify options */
