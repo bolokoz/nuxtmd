@@ -1,11 +1,16 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  runtimeConfig:{
+    mapbox_api: process.env.MAPBOX_API
+  },
   ssr:false,
     modules: [
         '@invictus.codes/nuxt-vuetify',
         '@nuxtjs/cloudinary',
         '@nuxtjs/supabase',
-        'nuxt-mapbox'
+        'nuxt-mapbox',
+        '@vite-pwa/nuxt',
+
       ],
 
       mapbox: {
