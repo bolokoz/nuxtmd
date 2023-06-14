@@ -1394,6 +1394,11 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.17.19.tgz#8cfaf2ff603e9aabb910e9c0558c26cf32744061"
   integrity sha512-lAhycmKnVOuRYNtRtatQR1LPQf2oYCkRGkSFnseDAKPl8lu5SOsK/e1sXe5a0Pc5kHIHe6P2I/ilntNv2xf3cA==
 
+"@fastify/accept-negotiator@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@fastify/accept-negotiator/-/accept-negotiator-1.1.0.tgz#c1c66b3b771c09742a54dd5bc87c582f6b0630ff"
+  integrity sha512-OIHZrb2ImZ7XG85HXOONLcJWGosv7sIvM2ifAPQVhg9Lv7qdmMBNVaai4QTdyuaqbKM5eO6sLSQOYI7wEQeCJQ==
+
 "@formkit/core@0.17.2":
   version "0.17.2"
   resolved "https://registry.yarnpkg.com/@formkit/core/-/core-0.17.2.tgz#17231851440c5bb9e4f1aca6bb543979d1af5504"
@@ -1715,6 +1720,24 @@
     ufo "^1.1.2"
   optionalDependencies:
     ipx "^1.1.0"
+
+"@nuxt/image@^1.0.0-rc.1":
+  version "1.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/@nuxt/image/-/image-1.0.0-rc.1.tgz#d565d2f517a3ee6f7d3360f7e25589d382cf0b97"
+  integrity sha512-gCYglIwEuYOdIbcH21RbMfqgQ2jqyd9SJH+GmyvH9M/vBsL7eZ4XEatfZRWa2q1A4DcIMs09/LbQiR3HHy2wZw==
+  dependencies:
+    "@nuxt/kit" "^3.5.3"
+    consola "^3.1.0"
+    defu "^6.1.2"
+    h3 "^1.6.6"
+    image-meta "^0.1.1"
+    node-fetch-native "^1.1.1"
+    ohash "^1.1.2"
+    pathe "^1.1.1"
+    std-env "^3.3.3"
+    ufo "^1.1.2"
+  optionalDependencies:
+    ipx "^1.2.0"
 
 "@nuxt/kit@3.5.2", "@nuxt/kit@^3.3.1", "@nuxt/kit@^3.3.2", "@nuxt/kit@^3.3.3", "@nuxt/kit@^3.5.0", "@nuxt/kit@^3.5.2":
   version "3.5.2"
@@ -4400,6 +4423,24 @@ ipx@^1.1.0:
     listhen "^1.0.4"
     node-fetch-native "^1.1.0"
     pathe "^1.1.0"
+    sharp "^0.32.1"
+    ufo "^1.1.2"
+    xss "^1.0.14"
+
+ipx@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/ipx/-/ipx-1.2.0.tgz#23130eed071a786158b86774980deca6e5d5fa9e"
+  integrity sha512-FkEP56C08HdlqlWKm3pMhatywPtDBTlePTdzskksCR1+7xnB6fQs6pXOTXPTG5i+gGPgCOxbNMUSZEH/DQcWDA==
+  dependencies:
+    "@fastify/accept-negotiator" "^1.1.0"
+    consola "^3.1.0"
+    defu "^6.1.2"
+    destr "^1.2.2"
+    etag "^1.8.1"
+    image-meta "^0.1.1"
+    listhen "^1.0.4"
+    node-fetch-native "^1.1.1"
+    pathe "^1.1.1"
     sharp "^0.32.1"
     ufo "^1.1.2"
     xss "^1.0.14"

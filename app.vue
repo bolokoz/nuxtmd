@@ -124,7 +124,10 @@
             <!-- <v-file-input show-size multiple chips counter label="File input"></v-file-input> -->
 
             <button @click="showUploadWidget()" id="upload_widget" class="cloudinary-button">Upload files</button>
+            <nuxt-picture v-for="image in images" :src="image"></nuxt-picture>
           </v-col>
+
+
           <v-btn type="submit" block class="mt-2" @click="addReview()" color="primary">Submit</v-btn>
         </v-row>
 
