@@ -10,14 +10,14 @@ export default defineNuxtConfig({
         '@nuxtjs/supabase',
         'nuxt-mapbox',
         '@vite-pwa/nuxt',
-        '@nuxt/image',
+        '@nuxt/image'
       ],
 
       image: {
         cloudinary: {
           baseURL: 'https://res.cloudinary.com/boloko/image/upload/'
         }
-      }
+      },
 
       mapbox: {
         accessToken: process.env.MAPBOX_API

@@ -60,6 +60,9 @@
           <v-col cols="12" md="4">
             <v-text-field v-model="valor" label="valor" required prefix="R$" type="number"></v-text-field>
           </v-col>
+          <v-col cols="12" md="4">
+            <v-text-field v-model="porcao" label="Serve quantos" required type="number"></v-text-field>
+          </v-col>
 
           <v-col cols="12" md="4">
             <v-select
@@ -124,11 +127,12 @@
             <!-- <v-file-input show-size multiple chips counter label="File input"></v-file-input> -->
 
             <button @click="showUploadWidget()" id="upload_widget" class="cloudinary-button">Upload files</button>
-            <nuxt-picture v-for="image in images" :src="image"></nuxt-picture>
+            <nuxt-picture v-for="image in images" :src="image" height="150" class="mx-2"></nuxt-picture>
           </v-col>
 
 
           <v-btn type="submit" block class="mt-2" @click="addReview()" color="primary">Submit</v-btn>
+          <v-btn type="test" block class="mt-2" @click="getMetaToken()" color="primary">test</v-btn>
         </v-row>
 
 
@@ -208,6 +212,7 @@ const restaurantId = ref('')
 const date = ref('')
 const prato = ref('')
 const valor = ref(10)
+const porcao = ref(1)
 const obs_sentimental = ref('')
 const obs_tecnico = ref('')
 const notaSentimental = ref(1)
@@ -222,6 +227,7 @@ function resetForm(){
   date.value = ''
   prato.value = ''
   valor.value = 10
+  porcao.value = 10
   obs_sentimental.value = ''
   obs_tecnico.value = ''
   notaSentimental.value = 1
@@ -307,9 +313,40 @@ function onSelectObsOptions() {
   switch (obsTemplateSelected.value) {
     case 'parmegiana v1':
       obs_tecnico.value = `
-        Molho: /3
-        Crosta: /3
-        Carne: /3
+      
+      - Nota: 8/10
+      - Restaurante:
+      - Preço: R$ ${valor.value}
+      - Data: ${date.value}
+      - Serve: ${porcao.value} pessoas
+
+      ---
+
+      Avaliação Parmegiana - v1
+      - Carne: 3/3
+      - Molho: 3/4
+      - Acompanhamentos: 2/3
+      TOTAL: 8/10
+
+      Restaurante
+      - Custo: 2/2
+      -  tempo de preparo: 2/1
+      - Montagem: 2/1
+      - Extras: 1/1
+      TOTAL: 3/5
+
+      Observações:
+
+      ---
+
+      Mais informações:
+      - Não tenho nenhuma qualificação
+      - Metodologia e mais detalhes no site
+      - Tabela comparativa completa no site
+      www.parmegianologo.netlify.app
+
+
+
       `
       break;
     case 'lanche v1':
@@ -344,6 +381,19 @@ function createRestaurant() {
   //TODO ADICIONAR lnglat 
 }
 
+//FACEBOOK API
+
+async function createContainer(imageUrl, caption){
+  const accountId = '17841400008460056'
+  const response = $fetch(`https://graph.facebook.com/v17.0/${accountId}/media
+  ?image_url=${imageUrl}
+  &caption=${caption}`, {
+    method: 'POST',
+  }).then((res) => {
+    $fetch(`https://graph.facebook.com/v17.0/${accountId}/media_publish?creation_id=${res}`)
+  }).finally(console.log(res))
+}
+
 // SUPABASE
 const client = useSupabaseClient()
 const { data: reviews, pending, error } = await useAsyncData('reviews', async () => {
@@ -368,6 +418,7 @@ async function addReview() {
       nota_sentimental: notaSentimental.value,
       nota_tecnica: notaTecnica.value,
       valor: valor.value,
+      porcao: porcao.value,
       photos: images.value,
       obs_sentimental: obs_sentimental.value,
       tipo: tipo.value,
@@ -375,9 +426,17 @@ async function addReview() {
       periodo: periodo.value
     })
   console.log('insert', data)
+  createContainer(images.value, 'TEST CAPTION')
   resetForm()
   snackbar.value = true
   loading.value = false
+}
+
+async function getMetaToken(){
+  const response = $fetch(`https://www.facebook.com/v17.0/dialog/oauth?
+  client_id=649545827092325
+  &redirect_uri={"https://www.domain.com/login"}
+  &state={"{st=staaaaaa,ds=1234567891}"`)
 }
 
 async function addNewRestaurant() {
